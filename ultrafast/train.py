@@ -370,7 +370,7 @@ def train(
         reload_dataloaders_every_n_epochs=1 if config.contrastive else 0,
         # Disable testing for final model mode
         limit_test_batches=0 if ship_model else 1.0,
-        val_check_interval  = 0.25,
+        val_check_interval  = 0.1,
     )
 
     if ship_model:
