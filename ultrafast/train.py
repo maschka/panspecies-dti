@@ -317,7 +317,7 @@ def train(
         )
 
     if not config.no_wandb:
-        wandb_logger = WandbLogger(project=config.wandb_proj, log_model='all')
+        wandb_logger = WandbLogger(project=config.wandb_proj, log_model='all', name = config.config.experiment_id)
         wandb_logger.watch(model)
         if hasattr(wandb_logger.experiment.config, 'update'):
             wandb_logger.experiment.config.update(OmegaConf.to_container(config, resolve=True, throw_on_missing=True))
