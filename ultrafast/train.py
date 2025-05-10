@@ -331,19 +331,31 @@ def train(
             verbose=True
         )
     else:
-        checkpoint_callback = pl.callbacks.ModelCheckpoint(
+        checkpoint_callback_val = pl.callbacks.ModelCheckpoint(
             monitor=config.watch_metric,
             mode="max" if "mse" not in config.watch_metric else "min",
-            filename=config.task,
+            filename=config.task+"_e-{epoch:02}_v-{val/loss:.3f}",
             dirpath=save_dir,
-            verbose=True
+            verbose=True,
+            save_top_k=10,
+            auto_insert_metric_name=False,
+        )
+        checkpoint_callback_train = pl.callbacks.ModelCheckpoint(
+            monitor="train/loss",
+            mode="min",
+            filename=config.task+ "_e-{epoch:02}_t-{train/loss:.3f}",
+            dirpath=save_dir,
+            verbose=True,
+            every_n_train_steps=300,
+            save_top_k=10,
+            auto_insert_metric_name=False,
         )
 
-    callbacks = [checkpoint_callback]
-    if args.eval_pcba:
-        callbacks.append(PCBAEvaluationCallback())
+    # callbacks = [checkpoint_callback]
+    # if args.eval_pcba:
+    #     callbacks.append(PCBAEvaluationCallback())
 
-    callbacks = [checkpoint_callback]
+    callbacks = [checkpoint_callback_val, checkpoint_callback_train]
     if args.eval_pcba:
         callbacks.append(PCBAEvaluationCallback())
 
@@ -358,6 +370,7 @@ def train(
         reload_dataloaders_every_n_epochs=1 if config.contrastive else 0,
         # Disable testing for final model mode
         limit_test_batches=0 if ship_model else 1.0,
+        val_check_interval  = 0.25,
     )
 
     if ship_model:

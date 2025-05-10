@@ -5,7 +5,10 @@
 *.npy
 tmp*
 *.pdb
+*.pt
 
+data/*
+data/
 data/**/*.h5
 data/**/*.pt
 data/**/*.lmdb
@@ -26,4 +29,7 @@ ultrafast.egg-info/
 *.tsv
 !data/**/*.tsv
 
-
+build/
+models/
+results/
+*.ipynb
