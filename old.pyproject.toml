@@ -38,12 +38,3 @@ ultrafast-topk = "ultrafast.compute_topk:compute_topk_cli"
 [tool.setuptools ]
 packages= ["ultrafast"] 
 include-package-data = true
-
-[tool.pixi.workspace]
-channels = ["conda-forge"]
-platforms = ["linux-64"]
-
-[tool.pixi.pypi-dependencies]
-ultrafast = { path = ".", editable = true }
-
-[tool.pixi.tasks]
